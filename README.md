@@ -1,82 +1,80 @@
-# ForumFlask
-A Python Flask forum
+# Contexte
 
+Nous aimerions créer une messagerie instantanée avec les fonctionnalités suivantes :
 
-# Context
-Notre objectif est de permettre au dev de communiquer entre eux.
-
-Une messagerie instantanée avec :
-
-- Des disscussion privés entre deux utilisateurs
-
-- Des salons entre plusieurs utilisateurs
-
-- (optionel) Des serveurs privés (agglomérations de salons)
-
-- Pass premium (avantages : personnalisation de l'interface)
-
-- Ajout d'amis et recommendation
 
 - Login et creation d'account
 
-- (optionel) Partage de fichier et appel vocaux
+- Ajout d'amis
 
-- Hiérarchie utilisateurs
+- Des salons de disscussions avec n utilisateurs (n >= 2)
+
+- Rôles utilisateurs (e.g. admin d'un groupe)
+
+
+- (optionel) Des serveurs privés (agglomérations de salons)
+
+- (optionel) Pass premium (avantages : personnalisation de l'interface)
+
+- (optionel) Partage de fichiers et appel vocaux
+
+# Type de pages
+
+- Une page de creation d'un compte (sign up)
+- Une page de connection (login)
+- Une page d'acceuil avec 
+   - Un bouton pour accéder à la page pour ajouter des amis
+   - Des boutons pour accéder aux conversations
+   - Une zone de notification (demande d'ami d'une autre personne)
+- Une page d'ajout d'amis
+- Une page de conversation pour envoyer et reçevoir des messages
 
 # Schéma relatif de la base de donnés
 
-1. **Users** (Utilisateurs)
-   - `id` (Primary Key)
-   - `username`
-   - `email`
-   - `password`
-   - `profile_picture`
-   - `status` (en ligne, hors ligne, etc.)
-   - `created_at`
+PK = Primary Key
+FK = Foreign Key
 
-2. **Servers** (Serveurs optionel)
-   - `id` (Primary Key)
-   - `name`
-   - `owner_id` (Foreign Key vers `Users.id`)
-   - `created_at`
+- **USER**  
+  - id_user (PK)  
+  - email  
+  - username  
+  - password_hash  
+  - is_premium (boolean)
 
-3. **Channels** (Canaux)
-   - `id` (Primary Key)
-   - `name`
-   - `server_id` (Foreign Key vers `Servers.id`)
-   - `type` (texte, vocal, etc.)
-   - `created_at`
+- **FRIENDSHIP**  
+  - user1_id (FK → USER.id_user)  
+  - user2_id (FK → USER.id_user)  
+  - status (e.g., pending, accepted)
 
-4. **Messages** (Messages)
-   - `id` (Primary Key)
-   - `channel_id` (Foreign Key vers `Channels.id`)
-   - `user_id` (Foreign Key vers `Users.id`)
-   - `content`
-   - `timestamp`
-   - `edited_at`
+- **SERVER** (optional)  
+  - id_server (PK)  
+  - server_name  
+  - owner_id (FK → USER.id_user)
 
-5. **Roles** (Rôles)
-   - `id` (Primary Key)
-   - `name`
-   - `permissions`
-   - `server_id` (Foreign Key vers `Servers.id`)
+- **CHANNEL** (optional, associated with a SERVER)  
+  - id_channel (PK)  
+  - id_server (FK → SERVER.id_server)  
+  - channel_name
 
-6. **UserRoles** (Rôles attribués aux utilisateurs)
-   - `user_id` (Foreign Key vers `Users.id`)
-   - `role_id` (Foreign Key vers `Roles.id`)
+- **CONVERSATION** (represents private chats or group channels)  
+  - id_conversation (PK)  
+  - type (e.g., private, group)  
+  - (optional) id_channel (FK → CHANNEL.id_channel)
 
-7. **Friends** (Amis)
-   - `user_id_1` (Foreign Key vers `Users.id`)
-   - `user_id_2` (Foreign Key vers `Users.id`)
-   - `status` (ami, bloqué, etc.)
+- **CONVERSATION_PARTICIPANT** (links users to conversations)  
+  - id_conversation (FK → CONVERSATION.id_conversation)  
+  - id_user (FK → USER.id_user)  
+  - role (e.g., admin, member)
 
+- **MESSAGE**  
+  - id_message (PK)  
+  - id_conversation (FK → CONVERSATION.id_conversation)  
+  - id_user (FK → USER.id_user, author)  
+  - content  
+  - timestamp
 
-### Relations principales
-- **Un utilisateur peut appartenir à plusieurs serveurs.**
-- **Un serveur a plusieurs canaux.**
-- **Un canal peut contenir plusieurs messages.**
-- **Un utilisateur peut avoir plusieurs rôles dans un serveur.**
-- **Un utilisateur peut être ami avec un autre.**
+- **FILE** (optional, for file sharing)  
+  - id_file (PK)  
+  - id_message (FK → MESSAGE.id_message)  
+  - file_path (files would be stored as files, not in the DB)
 
-# Type de pages
-Une page de login et une page de about et une page de conversation (envoi de messages). Une page d'admin (optionnel)
