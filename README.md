@@ -3,6 +3,8 @@ A Python Flask forum
 
 
 # Context
+Notre objectif est de permettre au dev de communiquer entre eux.
+
 Une messagerie instantanée avec :
 
 - Des disscussion privés entre deux utilisateurs
@@ -19,7 +21,7 @@ Une messagerie instantanée avec :
 
 - (optionel) Partage de fichier et appel vocaux
 
-- hiérarchie utilisateurs
+- Hiérarchie utilisateurs
 
 # Schéma relatif de la base de donnés
 
@@ -76,4 +78,5 @@ Une messagerie instantanée avec :
 - **Un utilisateur peut avoir plusieurs rôles dans un serveur.**
 - **Un utilisateur peut être ami avec un autre.**
 
-
+# Type de pages
+Une page de login et une page de about et une page de conversation (envoi de messages). Une page d'admin (optionnel)
