@@ -14,7 +14,7 @@ class User(UserMixin, db.Model):
     username = db.Column(db.String(100), unique=True, nullable=False)
     password_hash = db.Column(db.String(128), nullable=False)
     is_premium = db.Column(db.Boolean, default=False, nullable=False)
-    creation_time = db.Column(db.DateTime, default=datetime.datetime.utcnow)
+    creation_time = db.Column(db.DateTime, default=datetime.datetime.now)
 
     messages = db.relationship('Message', backref='sender', lazy=True)
     memberships = db.relationship('Member', backref='user', lazy=True)
@@ -59,7 +59,7 @@ class Message(db.Model):
     id_chat = db.Column(db.Integer, db.ForeignKey(f'{getenv("conversation_table", "Conversation")}.id'), nullable=False)
     id_sender = db.Column(db.Integer, db.ForeignKey(f'{getenv("user_table", "User")}.id'), nullable=False)
     content = db.Column(db.Text, nullable=False)
-    timestamp = db.Column(db.DateTime, default=datetime.datetime.utcnow)
+    timestamp = db.Column(db.DateTime, default=datetime.datetime.now)
 
 class File(db.Model):
     __tablename__ = getenv("file_table", "File")
