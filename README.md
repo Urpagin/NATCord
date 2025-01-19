@@ -1,3 +1,16 @@
+# How to run `backend` (for now)
+
+
+1. `cd` into backend
+
+2. `source venv/bin/activate`
+
+3. `python app.py`
+
+4. Go to http://127.0.0.1:5000
+
+
+
 # Contexte
 
 Nous aimerions créer une messagerie instantanée avec les fonctionnalités suivantes :
