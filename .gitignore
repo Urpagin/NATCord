@@ -243,3 +243,8 @@ Desktop.ini
 .env
 .env.*
 .env
+
+
+# Database
+instances
+
