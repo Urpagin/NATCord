@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8">
+    <title>Connexion</title>
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
+
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">
+		<img src="../images/drocsid.png" alt="Logo">
+		Natcord
+		</div>
+        <ul class="nav-links">
+			<li><a href="{{ url_for('main.index') }}">Accueil</a></li>
+			<li><a href="{{ url_for('main.register') }}">Inscription</a></li>
+			<li><a href="{{ url_for('main.login') }}">Connexion</a></li>
+			<li class="dropdown">
+				<a href="javascript:void(0);" id="settingsButton">Paramètres</a>
+					<ul class="dropdown-menu" id="settingsMenu">
+						<li><button id="darkModeToggle">Mode Sombre</button></li>
+					</ul>
+        </ul>
+    </nav>
+    <div class="login-container">
+        <h1>Connexion</h1>
+        <form action="/login" method="POST">
+            <label for="username">Adresse e-mail</label>
+            <input type="email" id="email" name="username" placeholder="Entrez votre email" required>
+            <label for="password">Mot de passe</label>
+            <input type="password" id="password" name="password" placeholder="Entrez votre mot de passe" required>
+            <button type="submit">Se connecter</button>
+        </form>
+    </div>
+</body>
+</html>

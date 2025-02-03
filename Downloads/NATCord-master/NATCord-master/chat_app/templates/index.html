@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}NATCord{% endblock %}</title>
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+	<script src="{{ url_for('static', filename='js/chat.js') }}" defer></script>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">
+		<img src="../images/drocsid.png" alt="Logo">
+		Natcord
+		</div>
+        <ul class="nav-links">
+            <li><a href="{{ url_for('main.index') }}">Accueil</a></li>
+			<li><a href="{{ url_for('main.register') }}">Inscription</a></li>
+			<li><a href="{{ url_for('main.login') }}">Connexion</a></li>
+			<li class="dropdown">
+				<a href="javascript:void(0);" id="settingsButton">Paramètres</a>
+					<ul class="dropdown-menu" id="settingsMenu">
+						<li><button id="darkModeToggle">Mode Sombre</button></li>
+					</ul>
+			</li>
+        </ul>
+    </nav>
+
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+	
+	<!-- Icône de profil en bas à gauche -->
+<!-- Icône de profil en bas à gauche -->
+	<div class="profile-container">
+		<img src="{{ url_for('static', filename='images/profile-icon.png') }}" alt="Profil" id="profileIcon">
+		
+		<!-- Box cachée qui s'affiche en cliquant sur l'icône -->
+		<div id="profileBox" class="profile-box">
+			<p><strong>Pseudo:</strong></p>
+			<p><strong>Email:</strong></p>
+			<p><strong>Mot de passe:</strong> ********</p>
+			<button id="closeProfile">Fermer</button>
+		</div>
+	</div>
+
+</body>
+</html>

@@ -1,0 +1,157 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+	background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #333;
+    padding: 10px 20px;
+}
+
+.logo {
+    color: white;
+    font-size: 24px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 10px; /* Espace entre l'image et le texte */
+}
+
+.logo img {
+    width: 40px; /* Ajuste la taille selon ton besoin */
+    height: auto; /* Garde les proportions */
+}
+
+
+.nav-links {
+    list-style: none;
+    display: flex;
+}
+
+.nav-links li {
+    padding: 0 15px;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: white;
+    font-size: 18px;
+}
+
+
+@media screen and (max-width: 768px) {
+    .nav-links {
+        display: none;
+        flex-direction: column;
+        width: 100%;
+        position: absolute;
+        top: 60px;
+        left: 0;
+        background-color: #333;
+        text-align: center;
+    }
+
+    .nav-links li {
+        padding: 15px 0;
+    }
+
+
+    .nav-active {
+        display: flex;
+    }
+}
+
+.dropdown {
+    position: relative;
+}
+
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    background-color: #333;
+    top: 100%;
+    left: 0;
+    min-width: 150px;
+    border-radius: 5px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    list-style: none;
+    padding: 5px 0;
+    margin: 0;
+    z-index: 1000;
+}
+
+.dropdown-menu.active {
+    display: block;
+}
+
+.dropdown-menu li {
+    padding: 10px;
+    text-align: center;
+}
+
+.dropdown-menu button {
+    width: 100%;
+    background: none;
+    border: none;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    padding: 10px;
+}
+
+.dropdown-menu button:hover {
+    background: #555;
+}
+
+/* Style de base pour la box de profil */
+.profile-box {
+    position: fixed;
+    bottom: 80px;
+    left: 20px;
+    background-color: white;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    display: none; /* La box est cachée par défaut */
+    width: 250px;
+}
+
+.profile-box p {
+    margin: 5px 0;
+}
+
+.profile-box button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+/* Classe pour afficher la box */
+.profile-box.show {
+    display: block; /* La box est affichée lorsque la classe .show est ajoutée */
+}
+
+/* Icône de profil en bas à gauche */
+.profile-container {
+    position: fixed;
+    bottom: 20px; /* distance depuis le bas de la page */
+    left: 20px;   /* distance depuis le côté gauche de la page */
+    z-index: 1000; /* Pour s'assurer que l'icône soit au-dessus des autres éléments */
+}
+
+#profileIcon {
+    width: 40px; /* Taille de l'icône (tu peux ajuster la taille comme tu veux) */
+    height: 40px;
+    cursor: pointer; /* Pour rendre l'icône cliquable */
+    border-radius: 50%; /* Rendre l'icône ronde si c'est une image circulaire */
+    border: 2px solid #fff; /* Bordure blanche autour de l'icône */
+    background-color: #007bff; /* Une couleur de fond pour l'icône */
+    padding: 5px;
+}
