@@ -4,7 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Discord Clone</title>
+    <title>NATCord</title>
+    <script src="../static/js/chat.js"></script>
     <style>
         body {
             display: flex;
@@ -112,12 +113,12 @@
             position: relative;
         }
 
-        .search-bar {
+        .input-bar {
             padding: 1rem;
             border-bottom: 1px solid #4f545c;
         }
 
-        .search-bar input {
+        .input-bar input {
             width: 100%;
             padding: 0.5rem;
             border-radius: 5px;
@@ -198,6 +199,10 @@
                 messageContainer.appendChild(messageDiv);
             });
         }
+
+
+
+
     </script>
 </head>
 
@@ -238,8 +243,8 @@
         </div>
     </div>
     <div class="main-content">
-        <div class="search-bar">
-            <input type="text" placeholder="Rechercher / lancer une conversation...">
+        <div class="input-bar">
+            <input id="messageInput" type="text" placeholder="Envoyer un message">
         </div>
         <div class="private-messages">
             <h2>Messages privés</h2>
