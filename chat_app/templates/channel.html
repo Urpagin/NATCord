@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>Polling Chat App</title>
+  </head>
+  <body>
+    <h1>Chat Room</h1>
+    <!-- Chat display area -->
+    <div id="chat" style="border: 1px solid #000; height: 300px; width: 500px; overflow: auto;"></div>
+    
+    <!-- Message input form -->
+    <form id="chat-form">
+      <input id="message" type="text" placeholder="Type your message" required>
+      <button type="submit">Send</button>
+    </form>
+
+    <script>
+      // Function to poll messages from the server
+      async function pollMessages() {
+        try {
+          const response = await fetch('/poll');
+          const msgs = await response.json();
+          const chatDiv = document.getElementById('chat');
+          chatDiv.innerHTML = ''; // Clear current messages
+          msgs.forEach(function(msg) {
+            const p = document.createElement('p');
+            p.textContent = msg;
+            chatDiv.appendChild(p);
+          });
+        } catch (error) {
+          console.error("Error polling messages:", error);
+        }
+      }
+
+      // Poll the server every 2 seconds
+      setInterval(pollMessages, 2000);
+      pollMessages(); // Initial poll
+
+      // Handle message submission
+      document.getElementById('chat-form').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        const input = document.getElementById('message');
+        const formData = new FormData();
+        formData.append('message', input.value);
+        try {
+          await fetch('/send', { method: 'POST', body: formData });
+          input.value = '';
+          pollMessages(); // Update immediately after sending
+        } catch (error) {
+          console.error("Error sending message:", error);
+        }
+      });
+    </script>
+  </body>
+</html>
