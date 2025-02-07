@@ -1,8 +1,9 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
-# from chat_app.models import db, User
-from src.models import db
+# Uncomment for DB
+#from .db.schema import User
+from .db.schema import db
 from .routes import User
 
 def create_app():

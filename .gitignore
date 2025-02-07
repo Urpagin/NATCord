@@ -248,7 +248,11 @@ Desktop.ini
 # Database
 instances
 
+instance/
+
+*.db
 
 # venv
 venv/
 env/
+.venv/

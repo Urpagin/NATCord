@@ -3,13 +3,14 @@ import secrets
 import logging
 import colorlog
 from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
 from dotenv import load_dotenv
 from src import create_app
-from src.models import db
+from src.db.schema import db  # Using the new schema
 
+# Load environment variables from .env file (if it exists)
 load_dotenv()
 
+# Setup logging with color
 handler = logging.StreamHandler()
 formatter = colorlog.ColoredFormatter(
     "%(log_color)s%(asctime)s - %(levelname)s - %(message)s",
@@ -22,38 +23,38 @@ formatter = colorlog.ColoredFormatter(
         "CRITICAL": "bold_red",
     },
 )
+
 handler.setFormatter(formatter)
 logger = logging.getLogger()
 logger.addHandler(handler)
 logger.setLevel(logging.DEBUG)
-
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 
 def create_env(env_file, database_name, database_dir, tables_name):
-    if not os.path.exists(env_file):    
-        logging.debug(f'File {env_file} does not exist, creating it...')
+    if not os.path.exists(env_file):
+        logging.debug(f"File {env_file} does not exist, creating it...")
         with open(env_file, "w") as file:
             try:
                 key = secrets.token_hex(32)
                 logging.debug("Secret key generated")
                 file.write(f"SECRET_KEY={key}\n")
             except Exception as e:
-                logging.error(f"An error occurred: {e}")
+                logging.error(f"An error occurred while generating SECRET_KEY: {e}")
 
             try:
-                db_url = f"sqlite:///{database_dir}/{database_name}.db"       
+                db_url = f"sqlite:///{database_dir}/{database_name}.db"
                 file.write(f"DATABASE_URL={db_url}\n")
-                logging.debug(f"Adding database URL into {env_file} file.")
+                logging.debug(f"Added database URL into {env_file}.")
                 file.write(f"DATABASE_DIR={database_dir}\n")
             except Exception as e:
-                logging.error(f"Failed to write into file {env_file}: {e}")
+                logging.error(f"Failed to write database information into {env_file}: {e}")
 
             for table, table_name in tables_name.items():
                 try:
                     file.write(f"{table}={table_name}\n")
                     logging.debug(f"Wrote {table_name} into {env_file}.")
                 except Exception as e:
-                    logging.error(f"Failed to write into {env_file}: {e}")
+                    logging.error(f"Failed to write table name into {env_file}: {e}")
     else:
         logging.warning(f"File {env_file} already exists, not altering it")
 
@@ -68,7 +69,7 @@ def create_database():
     
     try:
         app = create_app()
-        app.config['SQLALCHEMY_DATABASE_URI'] = database_url
+        app.config["SQLALCHEMY_DATABASE_URI"] = database_url
         with app.app_context():
             db.create_all()
         logging.debug(f"Database {database_name}.db successfully created in {database_dir}")
@@ -76,20 +77,14 @@ def create_database():
         logging.error(f"Failed to create database: {e}")
 
 if __name__ == "__main__":
-    env_file = '.env'
+    env_file = ".env"
     database_dir = "instance"
     database_name = "natcord"
     
-    # Tables
+    # only include the two table names we have.
     tables_name = {
-        "user_table": "User",
-        "friendship_table": "Friend",
-        "server_table": "Server",
-        "channel_table": "Channel",
-        "conversation_participant_table": "Conversation_participant",
-        "conversation_table": "Conversation",
-        "message_table": "Message",
-        "file_table": "File",
+        "user_table": "users",
+        "message_table": "messages",
     }
     
     create_env(env_file, database_name, database_dir, tables_name)
