@@ -1,8 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/x-icon" href="../static/favicon.png">
+  <script type="module" src="../static/js/chat.js"></script>
   <title>NATCord - General Chat</title>
   <style>
     /* Reset default styles */
@@ -12,15 +15,27 @@
       padding: 0;
     }
 
+    /* Set the body to column so the navbar is at the top */
     body {
       display: flex;
+      flex-direction: column;
       height: 100vh;
       background-color: #36393f;
       color: #fff;
       font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
     }
 
-    /* Left sidebar for channels */
+    /* Navbar remains as is (it will be at the top now) */
+    /* (The navbar is included via navbar.html) */
+
+    /* Wrap the rest of the content in a container that uses row layout */
+    .layout {
+      display: flex;
+      flex: 1;
+      /* Fill the remaining vertical space */
+    }
+
+    /* Left Sidebar for channels */
     .sidebar {
       width: 200px;
       background-color: #2f3136;
@@ -52,7 +67,7 @@
       background-color: #5865f2;
     }
 
-    /* Main chat area */
+    /* Main Chat Area */
     .main-content {
       flex: 1;
       display: flex;
@@ -92,7 +107,7 @@
       word-wrap: break-word;
     }
 
-    /* Input bar fixed at the bottom of the chat */
+    /* Input Bar */
     .input-bar {
       padding: 10px;
       background-color: #40444b;
@@ -120,7 +135,7 @@
       color: #fff;
     }
 
-    /* Right sidebar for online users */
+    /* Right Sidebar for online users */
     .online-sidebar {
       width: 200px;
       background-color: #2f3136;
@@ -143,197 +158,40 @@
       background-color: #40444b;
     }
   </style>
-  <script>
-    // Pre-assigned colors for some usernames.
-    const usernameColors = {
-      "Alice": "#ff5555",
-      "Bob": "#55ff55",
-      "Charlie": "#5555ff"
-    };
-
-    // Return a color for the username. If none is pre-assigned, generate one.
-    function getUsernameColor(username) {
-      if (usernameColors[username]) return usernameColors[username];
-      // Generate a random color.
-      const color = '#' + Math.floor(Math.random() * 16777215).toString(16);
-      usernameColors[username] = color;
-      return color;
-    }
-
-    /// Appends a message to the message history.
-    function appendMessage(username, message) {
-      const messageContainer = document.querySelector('.message-container');
-
-      // Create a new message div.
-      const messageDiv = document.createElement('div');
-      messageDiv.classList.add('message');
-
-      // Create a span for the username.
-      const usernameSpan = document.createElement('span');
-      usernameSpan.classList.add('username');
-      usernameSpan.textContent = username;
-      usernameSpan.style.color = getUsernameColor(username);
-
-      // Create a span for the message text.
-      const messageText = document.createElement('span');
-      messageText.classList.add('text');
-      messageText.textContent = message;
-
-      messageDiv.appendChild(usernameSpan);
-      messageDiv.appendChild(messageText);
-      messageContainer.appendChild(messageDiv);
-
-      // Scroll to the bottom of the message container.
-      messageContainer.scrollTop = messageContainer.scrollHeight;
-    }
-
-    async function sendMessage(username) {
-      const input = document.getElementById('messageInput');
-      const message = input.value;
-      if (!message.trim()) return; // Ignore empty messages
-
-      const timestamp = Math.floor(Date.now() / 1000); // current UNIX timestamp
-
-      try {
-        const response = await fetch('/send', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/x-www-form-urlencoded'
-          },
-          body: new URLSearchParams({
-            'message': message,
-            'timestamp': timestamp
-          })
-        });
-
-        if (!response.ok) {
-          console.error("Failed to send message:", response.statusText);
-        } else {
-          appendMessage(username, message);
-          input.value = '';
-        }
-      } catch (error) {
-        console.error("Error sending message:", error);
-      }
-    }
-
-    // Send message on Enter key press.
-    window.addEventListener('DOMContentLoaded', () => {
-      const input = document.getElementById('messageInput');
-      input.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') {
-          sendMessage();
-        }
-      });
-    });
-  </script>
 </head>
+
 <body>
-  <!-- Left Sidebar: Channels -->
-  <div class="sidebar">
-    <h2>Channels</h2>
-    <div class="channel active" onclick="location.reload()"># General</div>
-  </div>
+  <!-- Include the navbar at the top -->
+  {% include 'navbar.html' %}
 
-  <!-- Main Chat Area -->
-  <div class="main-content">
-    <div class="chat-header"># General</div>
-    <div class="message-container">
-      <!-- Chat messages will appear here -->
+  <!-- Content layout container for the rest of the page -->
+  <div class="layout">
+    <!-- Left Sidebar: Channels -->
+    <div class="sidebar">
+      <h2>Channels</h2>
+      <div class="channel active" onclick="location.reload()"># General</div>
     </div>
-    <div class="input-bar">
-      <input type="text" id="messageInput" placeholder="Type a message..." />
-      <!-- TWIG THING INSERT USERNAME  -->
-      <!-- TWIG THING INSERT USERNAME  -->
-      <!-- TWIG THING INSERT USERNAME  -->
-      <!-- TWIG THING INSERT USERNAME  -->
-      <!-- TWIG THING INSERT USERNAME  -->
-      <!-- TWIG THING INSERT USERNAME  -->
-      <!-- TWIG THING INSERT USERNAME  -->
-      <!-- TWIG THING INSERT USERNAME  -->
-      <!-- TWIG THING INSERT USERNAME  -->
-      <!-- TWIG THING INSERT USERNAME  -->
-      <!-- TWIG THING INSERT USERNAME  -->
-      <!-- TWIG THING INSERT USERNAME  -->
-      <!-- TWIG THING INSERT USERNAME  -->
-      <!-- TWIG THING INSERT USERNAME  -->
-      <!-- TWIG THING INSERT USERNAME  -->
-      <!-- TWIG THING INSERT USERNAME  -->
-      <!-- TWIG THING INSERT USERNAME  -->
-      <!-- TWIG THING INSERT USERNAME  -->
-      <!-- TWIG THING INSERT USERNAME  -->
-      <!-- TWIG THING INSERT USERNAME  -->
-      <!-- TWIG THING INSERT USERNAME  -->
-      <!-- TWIG THING INSERT USERNAME  -->
-      <!-- TWIG THING INSERT USERNAME  -->
-      <!-- TWIG THING INSERT USERNAME  -->
-      <!-- TWIG THING INSERT USERNAME  -->
-      <!-- TWIG THING INSERT USERNAME  -->
-      <!-- TWIG THING INSERT USERNAME  -->
-      <!-- TWIG THING INSERT USERNAME  -->
-      <!-- TWIG THING INSERT USERNAME  -->
-      <!-- TWIG THING INSERT USERNAME  -->
-      <!-- TWIG THING INSERT USERNAME  -->
-      <!-- TWIG THING INSERT USERNAME  -->
-      <!-- TWIG THING INSERT USERNAME  -->
-      <!-- TWIG THING INSERT USERNAME  -->
-      <!-- TWIG THING INSERT USERNAME  -->
-      <!-- TWIG THING INSERT USERNAME  -->
-      <!-- TWIG THING INSERT USERNAME  -->
-      <!-- TWIG THING INSERT USERNAME  -->
-      <!-- TWIG THING INSERT USERNAME  -->
-      <!-- TWIG THING INSERT USERNAME  -->
-      <!-- TWIG THING INSERT USERNAME  -->
-      <!-- TWIG THING INSERT USERNAME  -->
-      <!-- TWIG THING INSERT USERNAME  -->
-      <!-- TWIG THING INSERT USERNAME  -->
-      <!-- TWIG THING INSERT USERNAME  -->
-      <!-- TWIG THING INSERT USERNAME  -->
-      <!-- TWIG THING INSERT USERNAME  -->
-      <!-- TWIG THING INSERT USERNAME  -->
-      <!-- TWIG THING INSERT USERNAME  -->
-      <!-- TWIG THING INSERT USERNAME  -->
-      <!-- TWIG THING INSERT USERNAME  -->
-      <!-- TWIG THING INSERT USERNAME  -->
-      <!-- TWIG THING INSERT USERNAME  -->
-      <!-- TWIG THING INSERT USERNAME  -->
-      <!-- TWIG THING INSERT USERNAME  -->
-      <!-- TWIG THING INSERT USERNAME  -->
-      <!-- TWIG THING INSERT USERNAME  -->
-      <!-- TWIG THING INSERT USERNAME  -->
-      <!-- TWIG THING INSERT USERNAME  -->
-      <!-- TWIG THING INSERT USERNAME  -->
-      <!-- TWIG THING INSERT USERNAME  -->
-      <!-- TWIG THING INSERT USERNAME  -->
-      <!-- TWIG THING INSERT USERNAME  -->
-      <!-- TWIG THING INSERT USERNAME  -->
-      <!-- TWIG THING INSERT USERNAME  -->
-      <!-- TWIG THING INSERT USERNAME  -->
-      <!-- TWIG THING INSERT USERNAME  -->
-      <!-- TWIG THING INSERT USERNAME  -->
-      <!-- TWIG THING INSERT USERNAME  -->
-      <!-- TWIG THING INSERT USERNAME  -->
-      <!-- TWIG THING INSERT USERNAME  -->
-      <!-- TWIG THING INSERT USERNAME  -->
-      <!-- TWIG THING INSERT USERNAME  -->
-      <!-- TWIG THING INSERT USERNAME  -->
-      <!-- TWIG THING INSERT USERNAME  -->
-      <!-- TWIG THING INSERT USERNAME  -->
-      <!-- TWIG THING INSERT USERNAME  -->
-      <!-- TWIG THING INSERT USERNAME  -->
-      <!-- TWIG THING INSERT USERNAME  -->
-      <!-- TWIG THING INSERT USERNAME  -->
-      <!-- TWIG THING INSERT USERNAME  -->
-      <button onclick="sendMessage()">Send</button>
-    </div>
-  </div>
 
-  <!-- Right Sidebar: Online Users -->
-  <div class="online-sidebar">
-    <h2>Online</h2>
-    <div class="online-user">Alice</div>
-    <div class="online-user">Bob</div>
-    <div class="online-user">Charlie</div>
+    <!-- Main Chat Area -->
+    <div class="main-content">
+      <div class="chat-header"># General</div>
+      <div class="message-container">
+        <!-- Chat messages will appear here -->
+      </div>
+      <div class="input-bar">
+        <input type="text" id="messageInput" placeholder="Type a message..." />
+        <button id="sendButton">Send</button>
+      </div>
+    </div>
+
+    <!-- Right Sidebar: Online Users -->
+    <div class="online-sidebar">
+      <h2>Online</h2>
+      <div class="online-user">Alice</div>
+      <div class="online-user">Bob</div>
+      <div class="online-user">Charlie</div>
+    </div>
   </div>
 </body>
+
 </html>

@@ -7,6 +7,8 @@ import datetime
 db = SQLAlchemy()
 bcrypt = Bcrypt()
 
+
+
 class User(UserMixin, db.Model):
     __tablename__ = getenv("user_table", "User")
     id = db.Column(db.Integer, primary_key=True)
