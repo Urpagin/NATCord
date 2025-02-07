@@ -5,8 +5,8 @@ import colorlog
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from dotenv import load_dotenv
-from chat_app import create_app
-from chat_app.models import db
+from src import create_app
+from src.models import db
 
 load_dotenv()
 

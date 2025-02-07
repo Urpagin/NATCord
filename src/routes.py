@@ -54,6 +54,20 @@ def home():
     """Render main page for authenticated users."""
     return render_template("index.html")
 
+@main.route('/signup', methods=['GET', 'POST'])
+def signup():
+    if request.method == 'POST':
+        username = request.form.get('username')
+        password = request.form.get('password')
+        if username in USERS:
+            flash("Ce nom d'utilisateur existe déjà. Veuillez en choisir un autre.")
+            return redirect(url_for('main.signup'))
+        # Add new user (in production, store hashed passwords)
+        USERS[username] = password
+        flash("Inscription réussie. Veuillez vous connecter.")
+        return redirect(url_for('main.login'))
+    return render_template('signup.html')
+
 @main.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':

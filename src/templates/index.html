@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/x-icon" href="../static/favicon.png">
+  <script type="module" src="../static/js/chat.js"></script>
+  <title>NATCord - General Chat</title>
+  <link rel="stylesheet" href="../static/css/index.css">
+
+</head>
+
+<body>
+  <!-- Include the navbar at the top -->
+  {% include 'navbar.html' %}
+
+  <!-- Content layout container for the rest of the page -->
+  <div class="layout">
+    <!-- Left Sidebar: Channels -->
+    <div class="sidebar">
+      <h2>Channels</h2>
+      <div class="channel active" onclick="location.reload()"># General</div>
+    </div>
+
+    <!-- Main Chat Area -->
+    <div class="main-content">
+      <div class="chat-header"># General</div>
+      <div class="message-container">
+        <!-- Chat messages will appear here -->
+      </div>
+      <div class="input-bar">
+        <input type="text" id="messageInput" placeholder="Type a message..." />
+        <button id="sendButton">Send</button>
+      </div>
+    </div>
+
+    <!-- Right Sidebar: Online/Offline Users -->
+    <div class="online-sidebar">
+    </div>
+  </div>
+</body>
+
+</html>

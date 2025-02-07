@@ -1,0 +1,28 @@
+<!-- Navbar HTML -->
+<nav class="navbar">
+    <link rel="stylesheet" href="../static/css/navbar.css">
+    <script src="../static/js/navbar.js"></script>
+    <div class="navbar-left">
+        <!-- Hamburger menu button -->
+        <button id="menuBtn" class="menu-btn">☰</button>
+        <!-- Dropdown menu hidden by default -->
+        <div id="menuDropdown" class="menu-dropdown">
+            <p class="menu-user">
+                Logged in as: <span id="usernameDisplayDropdown">Username</span>
+            </p>
+            <button id="disconnectBtn" onclick="window.location.href='/logout'">
+                Disconnect
+            </button>
+            <button onclick="window.location.href='change-username.html'">
+                Change Username
+            </button>
+            <button onclick="window.location.href='change-password.html'">
+                Change Password
+            </button>
+        </div>
+    </div>
+    <div class="navbar-center">
+        <!-- Centered title; clicking it goes to index.html -->
+        <h1 class="navbar-title"><a href="/">NATCord</a></h1>
+    </div>
+</nav>

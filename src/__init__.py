@@ -2,7 +2,7 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 # from chat_app.models import db, User
-from chat_app.models import db
+from src.models import db
 from .routes import User
 
 def create_app():
@@ -29,7 +29,7 @@ def create_app():
             return User(user_id)
         return None
 
-    from chat_app.routes import main
+    from src.routes import main
     app.register_blueprint(main)
 
     return app

@@ -9,6 +9,11 @@ let initialReq = true;
 
 let debugCounter = 0;
 async function fetchMessages() {
+    // Only fetch if the document is visible
+    // Optimization simply done!!! (with websockets or SSE this would be optimized by default :/ )
+    if (document.hidden) return;
+
+
     console.log(`Polling messages... [${debugCounter}] (interval=${pollIntervalMs}ms)`);
     debugCounter++;
 
@@ -164,6 +169,7 @@ const usernameColors = {
     "Alice": "#ff5555",
     "Bob": "#55ff55",
     "Charlie": "#5555ff",
+    "ZOZOZO": "#5555ff",
 };
 
 // Define the current username (this value can be inserted server-side).
