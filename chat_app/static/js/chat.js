@@ -42,64 +42,6 @@ setInterval(fetchMessages, 500);
 // Initial fetch ensures messages load immediately
 fetchMessages();
 
-
-
-/// Appends a message to the message list on the message history.
-function appendMessage(friendName, message) {
-    const messageContainer = document.querySelector('.private-messages');
-
-    // Ensure the chat header is added only once
-    if (!document.querySelector('.private-messages h2')) {
-        const header = document.createElement('h2');
-        header.textContent = `Messages with ${friendName}`;
-        messageContainer.appendChild(header);
-    }
-
-    // Create a new message div and append it
-    const messageDiv = document.createElement('div');
-    messageDiv.textContent = message;
-    messageDiv.style.padding = '0.5rem';
-    messageDiv.style.marginBottom = '0.5rem';
-    messageDiv.style.backgroundColor = '#4f545c';
-    messageDiv.style.borderRadius = '5px';
-
-    messageContainer.appendChild(messageDiv);
-
-    // scroll to the bottom
-    messageContainer.scrollTop = messageContainer.scrollHeight;
-}
-
-
-
-async function sendMessage(message) {
-    if (!message.trim()) return; // Ignore empty messages
-
-    const timestamp = Math.floor(Date.now() / 1000); // Get current UNIX timestamp
-
-    try {
-        const response = await fetch('/send', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded'
-            },
-            body: new URLSearchParams({
-                'message': message,
-                'timestamp': timestamp
-            })
-        });
-
-        if (!response.ok) {
-            console.error("Failed to send message:", response.statusText);
-        } else {
-            //appendMessage("bla bla", message);
-        }
-    } catch (error) {
-        console.error("Error sending message:", error);
-    }
-}
-
-
-
 // only when the page is loaded
 document.addEventListener("DOMContentLoaded", function() {
     const inputField = document.getElementById("messageInput");

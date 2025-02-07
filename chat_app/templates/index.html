@@ -1,262 +1,339 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NATCord</title>
-    <script src="../static/js/chat.js"></script>
-    <style>
-        body {
-            display: flex;
-            margin: 0;
-            height: 100vh;
-            background-color: #2c2f33;
-            color: white;
-            font-family: Arial, sans-serif;
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NATCord - General Chat</title>
+  <style>
+    /* Reset default styles */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      display: flex;
+      height: 100vh;
+      background-color: #36393f;
+      color: #fff;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    /* Left sidebar for channels */
+    .sidebar {
+      width: 200px;
+      background-color: #2f3136;
+      padding: 10px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .sidebar h2 {
+      margin-bottom: 10px;
+      font-size: 1.2em;
+      border-bottom: 1px solid #4f545c;
+      padding-bottom: 5px;
+    }
+
+    .channel {
+      padding: 8px 10px;
+      margin-bottom: 5px;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+
+    .channel:hover {
+      background-color: #40444b;
+    }
+
+    .channel.active {
+      background-color: #5865f2;
+    }
+
+    /* Main chat area */
+    .main-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      background-color: #36393f;
+      position: relative;
+    }
+
+    .chat-header {
+      padding: 10px;
+      background-color: #2f3136;
+      border-bottom: 1px solid #202225;
+      font-size: 1.2em;
+    }
+
+    .message-container {
+      flex: 1;
+      overflow-y: auto;
+      padding: 10px;
+    }
+
+    .message {
+      margin-bottom: 10px;
+      padding: 8px;
+      border-radius: 5px;
+      background-color: #40444b;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .message .username {
+      font-weight: bold;
+      margin-bottom: 3px;
+    }
+
+    .message .text {
+      word-wrap: break-word;
+    }
+
+    /* Input bar fixed at the bottom of the chat */
+    .input-bar {
+      padding: 10px;
+      background-color: #40444b;
+      border-top: 1px solid #202225;
+      display: flex;
+    }
+
+    .input-bar input {
+      flex: 1;
+      padding: 10px;
+      border: none;
+      border-radius: 5px;
+      outline: none;
+      font-size: 1em;
+    }
+
+    .input-bar button {
+      margin-left: 10px;
+      padding: 10px 15px;
+      background-color: #5865f2;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 1em;
+      color: #fff;
+    }
+
+    /* Right sidebar for online users */
+    .online-sidebar {
+      width: 200px;
+      background-color: #2f3136;
+      padding: 10px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .online-sidebar h2 {
+      margin-bottom: 10px;
+      font-size: 1.2em;
+      border-bottom: 1px solid #4f545c;
+      padding-bottom: 5px;
+    }
+
+    .online-user {
+      padding: 8px;
+      margin-bottom: 5px;
+      border-radius: 5px;
+      background-color: #40444b;
+    }
+  </style>
+  <script>
+    // Pre-assigned colors for some usernames.
+    const usernameColors = {
+      "Alice": "#ff5555",
+      "Bob": "#55ff55",
+      "Charlie": "#5555ff"
+    };
+
+    // Return a color for the username. If none is pre-assigned, generate one.
+    function getUsernameColor(username) {
+      if (usernameColors[username]) return usernameColors[username];
+      // Generate a random color.
+      const color = '#' + Math.floor(Math.random() * 16777215).toString(16);
+      usernameColors[username] = color;
+      return color;
+    }
+
+    /// Appends a message to the message history.
+    function appendMessage(username, message) {
+      const messageContainer = document.querySelector('.message-container');
+
+      // Create a new message div.
+      const messageDiv = document.createElement('div');
+      messageDiv.classList.add('message');
+
+      // Create a span for the username.
+      const usernameSpan = document.createElement('span');
+      usernameSpan.classList.add('username');
+      usernameSpan.textContent = username;
+      usernameSpan.style.color = getUsernameColor(username);
+
+      // Create a span for the message text.
+      const messageText = document.createElement('span');
+      messageText.classList.add('text');
+      messageText.textContent = message;
+
+      messageDiv.appendChild(usernameSpan);
+      messageDiv.appendChild(messageText);
+      messageContainer.appendChild(messageDiv);
+
+      // Scroll to the bottom of the message container.
+      messageContainer.scrollTop = messageContainer.scrollHeight;
+    }
+
+    async function sendMessage(username) {
+      const input = document.getElementById('messageInput');
+      const message = input.value;
+      if (!message.trim()) return; // Ignore empty messages
+
+      const timestamp = Math.floor(Date.now() / 1000); // current UNIX timestamp
+
+      try {
+        const response = await fetch('/send', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+          },
+          body: new URLSearchParams({
+            'message': message,
+            'timestamp': timestamp
+          })
+        });
+
+        if (!response.ok) {
+          console.error("Failed to send message:", response.statusText);
+        } else {
+          appendMessage(username, message);
+          input.value = '';
         }
+      } catch (error) {
+        console.error("Error sending message:", error);
+      }
+    }
 
-        .sidebar {
-            width: 20%;
-            background-color: #23272a;
-            display: flex;
-            flex-direction: column;
+    // Send message on Enter key press.
+    window.addEventListener('DOMContentLoaded', () => {
+      const input = document.getElementById('messageInput');
+      input.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+          sendMessage();
         }
-
-        .sidebar-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1rem;
-            border-bottom: 1px solid #4f545c;
-            position: relative;
-        }
-
-        .dropdown {
-            display: none;
-            position: absolute;
-            top: 100%;
-            right: 1rem;
-            background-color: #2c2f33;
-            border: 1px solid #4f545c;
-            border-radius: 5px;
-            padding: 0.5rem;
-            z-index: 10;
-        }
-
-        .dropdown input {
-            width: 100%;
-            padding: 0.5rem;
-            margin-bottom: 0.5rem;
-            border-radius: 5px;
-            border: none;
-            background-color: #23272a;
-            color: white;
-        }
-
-        .dropdown button {
-            width: 100%;
-            padding: 0.5rem;
-            margin-bottom: 0.5rem;
-            border-radius: 5px;
-            border: none;
-            background-color: #43b581;
-            color: white;
-            cursor: pointer;
-        }
-
-        .dropdown-active {
-            display: block;
-        }
-
-        .online-friends {
-            padding: 1rem;
-            border-bottom: 1px solid #4f545c;
-        }
-
-        .online-friends h2 {
-            margin-bottom: 0.5rem;
-        }
-
-        .friend {
-            display: flex;
-            align-items: center;
-            margin-bottom: 0.5rem;
-            cursor: pointer;
-        }
-
-        .friend:hover {
-            background-color: #4f545c;
-            border-radius: 5px;
-            padding: 0.5rem;
-        }
-
-        .friend-avatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background-color: #4f545c;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin-right: 1rem;
-        }
-
-        .friend-status {
-            color: #43b581;
-        }
-
-        .main-content {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            position: relative;
-        }
-
-        .input-bar {
-            padding: 1rem;
-            border-bottom: 1px solid #4f545c;
-        }
-
-        .input-bar input {
-            width: 100%;
-            padding: 0.5rem;
-            border-radius: 5px;
-            border: none;
-        }
-
-        .private-messages {
-            padding: 1rem;
-            overflow-y: auto;
-            flex: 1;
-        }
-
-        .profile-sidebar {
-            width: 20%;
-            background-color: #23272a;
-            display: flex;
-            flex-direction: column;
-            padding: 1rem;
-            border-left: 1px solid #4f545c;
-        }
-
-        .profile-avatar {
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            background-color: #4f545c;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin: 0 auto;
-            margin-bottom: 1rem;
-        }
-
-        .profile-info {
-            text-align: center;
-        }
-
-        .profile-info h2 {
-            margin-bottom: 0.5rem;
-        }
-
-        .profile-info p {
-            color: #b9bbbe;
-        }
-    </style>
-    <script>
-        const friendsMessages = {
-            eclipsoss: [
-                "Hello! How are you?",
-                "I'm doing great, thanks for asking!",
-            ],
-            mrjoklo: [
-                "Did you finish the project?",
-                "Yes, I submitted it yesterday.",
-            ],
-            Pyraxxe: [
-                "Let's play later tonight!",
-                "Sure, what time?",
-            ],
-        };
-        function toggleDropdown() {
-            const dropdown = document.getElementById('dropdown');
-            dropdown.classList.toggle('dropdown-active');
-        }
-
-
-        function displayMessages(friendName) {
-            const messageContainer = document.querySelector('.private-messages');
-            messageContainer.innerHTML = `<h2>Messages with ${friendName}</h2>`;
-            const messages = friendsMessages[friendName] || [];
-            messages.forEach((message) => {
-                const messageDiv = document.createElement('div');
-                messageDiv.textContent = message;
-                messageDiv.style.padding = '0.5rem';
-                messageDiv.style.marginBottom = '0.5rem';
-                messageDiv.style.backgroundColor = '#4f545c';
-                messageDiv.style.borderRadius = '5px';
-                messageContainer.appendChild(messageDiv);
-            });
-        }
-
-
-
-
-    </script>
+      });
+    });
+  </script>
 </head>
-
 <body>
-    <div class="sidebar">
-        <div class="sidebar-header">
-            <h1>Amis</h1>
-            <button onclick="toggleDropdown()"
-                style="background-color: #43b581; color: white; border: none; padding: 0.5rem 1rem; border-radius: 5px; cursor: pointer;">Ajouter</button>
-            <div id="dropdown" class="dropdown">
-                <input type="text" placeholder="Rechercher un ami...">
-                <button>Ajouter un ami</button>
-            </div>
-        </div>
-        <div class="online-friends">
-            <h2>En ligne – 3</h2>
-            <div class="friend" onclick="displayMessages('eclipsoss')">
-                <div class="friend-avatar">E</div>
-                <div>
-                    <h3>eclipsoss</h3>
-                    <span class="friend-status">En ligne</span>
-                </div>
-            </div>
-            <div class="friend" onclick="displayMessages('mrjoklo')">
-                <div class="friend-avatar">M</div>
-                <div>
-                    <h3>mrjoklo</h3>
-                    <span class="friend-status">En ligne</span>
-                </div>
-            </div>
-            <div class="friend" onclick="displayMessages('Pyraxxe')">
-                <div class="friend-avatar">P</div>
-                <div>
-                    <h3>Pyraxxe</h3>
-                    <span style="color: #747f8d;">Inactif</span>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="main-content">
-        <div class="input-bar">
-            <input id="messageInput" type="text" placeholder="Envoyer un message">
-        </div>
-        <div class="private-messages">
-            <h2>Messages privés</h2>
-        </div>
-    </div>
-    <div class="profile-sidebar">
-        <div class="profile-avatar">P</div>
-        <div class="profile-info">
-            <h2>Mon Profil</h2>
-            <p>#0001</p>
-        </div>
-    </div>
-</body>
+  <!-- Left Sidebar: Channels -->
+  <div class="sidebar">
+    <h2>Channels</h2>
+    <div class="channel active" onclick="location.reload()"># General</div>
+  </div>
 
+  <!-- Main Chat Area -->
+  <div class="main-content">
+    <div class="chat-header"># General</div>
+    <div class="message-container">
+      <!-- Chat messages will appear here -->
+    </div>
+    <div class="input-bar">
+      <input type="text" id="messageInput" placeholder="Type a message..." />
+      <!-- TWIG THING INSERT USERNAME  -->
+      <!-- TWIG THING INSERT USERNAME  -->
+      <!-- TWIG THING INSERT USERNAME  -->
+      <!-- TWIG THING INSERT USERNAME  -->
+      <!-- TWIG THING INSERT USERNAME  -->
+      <!-- TWIG THING INSERT USERNAME  -->
+      <!-- TWIG THING INSERT USERNAME  -->
+      <!-- TWIG THING INSERT USERNAME  -->
+      <!-- TWIG THING INSERT USERNAME  -->
+      <!-- TWIG THING INSERT USERNAME  -->
+      <!-- TWIG THING INSERT USERNAME  -->
+      <!-- TWIG THING INSERT USERNAME  -->
+      <!-- TWIG THING INSERT USERNAME  -->
+      <!-- TWIG THING INSERT USERNAME  -->
+      <!-- TWIG THING INSERT USERNAME  -->
+      <!-- TWIG THING INSERT USERNAME  -->
+      <!-- TWIG THING INSERT USERNAME  -->
+      <!-- TWIG THING INSERT USERNAME  -->
+      <!-- TWIG THING INSERT USERNAME  -->
+      <!-- TWIG THING INSERT USERNAME  -->
+      <!-- TWIG THING INSERT USERNAME  -->
+      <!-- TWIG THING INSERT USERNAME  -->
+      <!-- TWIG THING INSERT USERNAME  -->
+      <!-- TWIG THING INSERT USERNAME  -->
+      <!-- TWIG THING INSERT USERNAME  -->
+      <!-- TWIG THING INSERT USERNAME  -->
+      <!-- TWIG THING INSERT USERNAME  -->
+      <!-- TWIG THING INSERT USERNAME  -->
+      <!-- TWIG THING INSERT USERNAME  -->
+      <!-- TWIG THING INSERT USERNAME  -->
+      <!-- TWIG THING INSERT USERNAME  -->
+      <!-- TWIG THING INSERT USERNAME  -->
+      <!-- TWIG THING INSERT USERNAME  -->
+      <!-- TWIG THING INSERT USERNAME  -->
+      <!-- TWIG THING INSERT USERNAME  -->
+      <!-- TWIG THING INSERT USERNAME  -->
+      <!-- TWIG THING INSERT USERNAME  -->
+      <!-- TWIG THING INSERT USERNAME  -->
+      <!-- TWIG THING INSERT USERNAME  -->
+      <!-- TWIG THING INSERT USERNAME  -->
+      <!-- TWIG THING INSERT USERNAME  -->
+      <!-- TWIG THING INSERT USERNAME  -->
+      <!-- TWIG THING INSERT USERNAME  -->
+      <!-- TWIG THING INSERT USERNAME  -->
+      <!-- TWIG THING INSERT USERNAME  -->
+      <!-- TWIG THING INSERT USERNAME  -->
+      <!-- TWIG THING INSERT USERNAME  -->
+      <!-- TWIG THING INSERT USERNAME  -->
+      <!-- TWIG THING INSERT USERNAME  -->
+      <!-- TWIG THING INSERT USERNAME  -->
+      <!-- TWIG THING INSERT USERNAME  -->
+      <!-- TWIG THING INSERT USERNAME  -->
+      <!-- TWIG THING INSERT USERNAME  -->
+      <!-- TWIG THING INSERT USERNAME  -->
+      <!-- TWIG THING INSERT USERNAME  -->
+      <!-- TWIG THING INSERT USERNAME  -->
+      <!-- TWIG THING INSERT USERNAME  -->
+      <!-- TWIG THING INSERT USERNAME  -->
+      <!-- TWIG THING INSERT USERNAME  -->
+      <!-- TWIG THING INSERT USERNAME  -->
+      <!-- TWIG THING INSERT USERNAME  -->
+      <!-- TWIG THING INSERT USERNAME  -->
+      <!-- TWIG THING INSERT USERNAME  -->
+      <!-- TWIG THING INSERT USERNAME  -->
+      <!-- TWIG THING INSERT USERNAME  -->
+      <!-- TWIG THING INSERT USERNAME  -->
+      <!-- TWIG THING INSERT USERNAME  -->
+      <!-- TWIG THING INSERT USERNAME  -->
+      <!-- TWIG THING INSERT USERNAME  -->
+      <!-- TWIG THING INSERT USERNAME  -->
+      <!-- TWIG THING INSERT USERNAME  -->
+      <!-- TWIG THING INSERT USERNAME  -->
+      <!-- TWIG THING INSERT USERNAME  -->
+      <!-- TWIG THING INSERT USERNAME  -->
+      <!-- TWIG THING INSERT USERNAME  -->
+      <!-- TWIG THING INSERT USERNAME  -->
+      <!-- TWIG THING INSERT USERNAME  -->
+      <!-- TWIG THING INSERT USERNAME  -->
+      <!-- TWIG THING INSERT USERNAME  -->
+      <!-- TWIG THING INSERT USERNAME  -->
+      <!-- TWIG THING INSERT USERNAME  -->
+      <button onclick="sendMessage()">Send</button>
+    </div>
+  </div>
+
+  <!-- Right Sidebar: Online Users -->
+  <div class="online-sidebar">
+    <h2>Online</h2>
+    <div class="online-user">Alice</div>
+    <div class="online-user">Bob</div>
+    <div class="online-user">Charlie</div>
+  </div>
+</body>
 </html>
