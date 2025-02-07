@@ -1,7 +1,7 @@
 from uuid import uuid4
 import time
 from typing import Optional
-from .user import User
+from src.user import User
 
 class Message:
     """Class for representing a very simple message."""

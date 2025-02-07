@@ -1,0 +1,10 @@
+services:
+  natcord:
+    build: .
+    command: gunicorn -w 4 wsgi:app -b 0.0.0.0:8000
+    restart: unless-stopped
+    ports:
+      - "50742:8000"
+    environment:
+      - FLASK_ENV=production
+

@@ -3,12 +3,12 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 # Uncomment for DB
 #from .db.schema import User
-from .db.schema import db
-from .routes import User
+from src.db.schema import db
+from src.routes import User
 
 def create_app():
     app = Flask(__name__)
-    app.config.from_object('config.Config')
+    app.config.from_object('src.config.Config')
 
     # Initialisation de la base de données
     db.init_app(app)

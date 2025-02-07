@@ -4,20 +4,54 @@ A simple instant messenger with a UI similar to Discord.
 
 # Hosting
 
-## Linux
-For now:
+## Quick Setup (Linux)
 
-`git clone --branch dev --single-branch https://github.com/Urpagin/NATCord.git`
+1. **Clone the Repo:**
+   ```bash
+   git clone https://github.com/Urpagin/NATCord.git
+   cd NATCord
+   ```
 
-`cd NATCord`
+2. **Set Up Virtual Environment:**
+   ```bash
+   python -m venv venv
+   source venv/bin/activate      # Windows: venv\Scripts\activate
+   pip install -r requirements.txt
+   ```
 
-`python -m venv venv`
+## Running the App
 
-`source venv/bin/activate`
+### Development 🚀
+- **Manually:**
+  ```bash
+  export FLASK_APP=run.py
+  export FLASK_ENV=development
+  flask run
+  ```
+- **Or with Script:**
+  ```bash
+  ./run/run_dev.sh
+  ```
 
-`pip install -r requirements.txt`
+### Production 🌍
+- **Manually:**
+  ```bash
+  export FLASK_APP=wsgi.py
+  export FLASK_ENV=production
+  gunicorn -w 4 wsgi:app
+  ```
+- **Or with Script:**
+  ```bash
+  ./run/run_prod.sh
+  ```
 
-`python run.py`
+### Docker 🐳
+- **Build & Run:**
+  ```bash
+  docker compose up --build
+  ```
+  The app will be available at [http://localhost:50742](http://localhost:50742).
+
 
 ## Windows & Mac
 Not tested.

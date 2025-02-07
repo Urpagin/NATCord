@@ -1,3 +1,7 @@
+#!/bin/python3
+
+# DEVELOPEMENT ONLY, NOT PRODUCTION.
+
 from src import create_app
 
 app = create_app()

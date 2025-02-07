@@ -9,7 +9,7 @@ from flask_login import (
     login_required,
     current_user
 )
-from .message import Message
+from src.message import Message
 import time
 
 # Create blueprint
