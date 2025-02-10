@@ -7,6 +7,3 @@ services:
       - "50742:8000"
     environment:
       - FLASK_ENV=production
-    volumes:
-      - ./data:/app
-
