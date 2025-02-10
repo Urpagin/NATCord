@@ -242,3 +242,19 @@ Desktop.ini
 # dotenv
 .env
 .env.*
+.env
+
+
+# Database
+instances
+
+instance/
+
+*.db
+
+data/
+
+# venv
+venv/
+env/
+.venv/

@@ -1,80 +1,71 @@
-# Contexte
+# NATCord
 
-Nous aimerions créer une messagerie instantanée avec les fonctionnalités suivantes :
+A simple instant messenger with a UI similar to Discord.
+
+# Hosting
+
+## Quick Setup (Linux)
+
+1. **Clone the Repo:**
+   ```bash
+   git clone https://github.com/Urpagin/NATCord.git
+   cd NATCord
+   ```
+
+2. **Set Up Virtual Environment:**
+   ```bash
+   python -m venv venv
+   source venv/bin/activate      # Windows: venv\Scripts\activate
+   pip install -r requirements.txt
+   ```
+
+## Running the App
+
+### Development 🚀
+
+- **Initialize the database:**
+  ```
+  python -m src.db.deploy
+  ```
+
+- **Manually:**
+  ```bash
+  export FLASK_APP=run.py
+  export FLASK_ENV=development
+  flask run
+  ```
+- **Or with Script:**
+  ```bash
+  ./run/run_dev.sh
+  ```
+
+### Production 🌍
+- **Manually:**
+  ```bash
+  export FLASK_APP=wsgi.py
+  export FLASK_ENV=production
+  gunicorn -w 4 wsgi:app
+  ```
+- **Or with Script:**
+  ```bash
+  ./run/run_prod.sh
+  ```
+
+### Docker 🐳
+- **Build & Run:**
+  ```bash
+  docker compose up --build
+  ```
+  The app will be available at [http://localhost:50742](http://localhost:50742).
 
 
-- Login et creation d'account
+## Windows & Mac
+Not tested.
 
-- Ajout d'amis
+# Inner Workings & Technologies
 
-- Des salons de disscussions avec n utilisateurs (n >= 2)
+We use the Python programming language and the Flask micro web framework as the backend and HTML, CSS, and JavaScript as the frontend.
 
-- Rôles utilisateurs (e.g. admin d'un groupe)
+The backend also has a database, which uses [Flask-SQLAlchemy](https://flask-sqlalchemy.readthedocs.io/en/stable/quickstart/) (with SQLite under the hood).
 
-
-- (optionel) Des serveurs privés (agglomérations de salons)
-
-- (optionel) Pass premium (avantages : personnalisation de l'interface)
-
-- (optionel) Partage de fichiers et appel vocaux
-
-# Type de pages
-
-- Une page de creation d'un compte (sign up)
-- Une page de connection (login)
-- Une page d'acceuil avec 
-   - Un bouton pour accéder à la page pour ajouter des amis
-   - Des boutons pour accéder aux conversations
-   - Une zone de notification (demande d'ami d'une autre personne)
-- Une page d'ajout d'amis
-- Une page de conversation pour envoyer et reçevoir des messages
-
-# Schéma relatif de la base de donnés
-
-PK = Primary Key
-FK = Foreign Key
-
-- **USER**  
-  - id_user (PK)  
-  - email  
-  - username  
-  - password_hash  
-  - is_premium (boolean)
-
-- **FRIENDSHIP**  
-  - user1_id (FK → USER.id_user)  
-  - user2_id (FK → USER.id_user)  
-  - status (e.g., pending, accepted)
-
-- **SERVER** (optional)  
-  - id_server (PK)  
-  - server_name  
-  - owner_id (FK → USER.id_user)
-
-- **CHANNEL** (optional, associated with a SERVER)  
-  - id_channel (PK)  
-  - id_server (FK → SERVER.id_server)  
-  - channel_name
-
-- **CONVERSATION** (represents private chats or group channels)  
-  - id_conversation (PK)  
-  - type (e.g., private, group)  
-  - (optional) id_channel (FK → CHANNEL.id_channel)
-
-- **CONVERSATION_PARTICIPANT** (links users to conversations)  
-  - id_conversation (FK → CONVERSATION.id_conversation)  
-  - id_user (FK → USER.id_user)  
-  - role (e.g., admin, member)
-
-- **MESSAGE**  
-  - id_message (PK)  
-  - id_conversation (FK → CONVERSATION.id_conversation)  
-  - id_user (FK → USER.id_user, author)  
-  - content  
-  - timestamp
-
-- **FILE** (optional, for file sharing)  
-  - id_file (PK)  
-  - id_message (FK → MESSAGE.id_message)  
-  - file_path (files would be stored as files, not in the DB)
-
+For synchronization between the client and server, we originally considered using efficient methods like WebSockets or, even better, [SSE](https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events) (Server-Sent Events), but we encountered difficulties implementing them. In the end, we opted for a simple yet inefficient HTTP polling system.

@@ -1,0 +1,79 @@
+/* Navbar styling */
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: #2f3136;
+    color: #fff;
+    padding: 5px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    z-index: 1000;
+    /* Adjust if necessary */
+}
+
+
+.navbar-left {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.menu-btn {
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 1.5em;
+    cursor: pointer;
+}
+
+/* Dropdown menu for the hamburger */
+.menu-dropdown {
+    display: none;
+    position: absolute;
+    top: 40px;
+    /* Adjust to appear below the button */
+    left: 0;
+    background-color: #2f3136;
+    border: 1px solid #4f545c;
+    border-radius: 4px;
+    padding: 10px;
+    width: 200px;
+    z-index: 1000;
+}
+
+.menu-dropdown p {
+    margin: 0 0 10px 0;
+    font-size: 0.9em;
+    color: #ccc;
+}
+
+.menu-dropdown button {
+    width: 100%;
+    background-color: #5865f2;
+    border: none;
+    padding: 8px 12px;
+    margin-bottom: 8px;
+    color: #fff;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.navbar-center {
+    flex: 1;
+    text-align: center;
+}
+
+.navbar-title {
+    font-size: 2em;
+    font-weight: bold;
+    margin: 0;
+}
+
+/* Override the default styling of links inside .navbar-title */
+.navbar-title a {
+    color: inherit;
+    text-decoration: none;
+}
