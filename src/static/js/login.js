@@ -1,13 +1,5 @@
-// Helper function to set a cookie with a given name, value, and expiration in days.
-function setCookie(name, value, days) {
-    let expires = "";
-    if (days) {
-        const date = new Date();
-        date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000);
-        expires = "; expires=" + date.toUTCString();
-    }
-    document.cookie = name + "=" + (value || "") + expires + "; path=/";
-}
+import { setCookie } from './globals.js';
+
 
 // Function to read the username from the input and set the cookie.
 function setUsernameCookie() {

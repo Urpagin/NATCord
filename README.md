@@ -22,6 +22,12 @@ A simple instant messenger with a UI similar to Discord.
 ## Running the App
 
 ### Development 🚀
+
+- **Initialize the database:**
+  ```
+  python -m src.db.deploy
+  ```
+
 - **Manually:**
   ```bash
   export FLASK_APP=run.py

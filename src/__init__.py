@@ -1,37 +1,27 @@
 from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
-# Uncomment for DB
-#from .db.schema import User
-from src.db.schema import db
-from src.routes import User
+from src.db.schema import db, User  # DB models
+from src.routes import main
 
 def create_app():
     app = Flask(__name__)
     app.config.from_object('src.config.Config')
-
-    # Initialisation de la base de données
+    
+    # Initialize the database
     db.init_app(app)
-
-    # Initialisation de Flask-Login
+    
     login_manager = LoginManager()
     login_manager.login_view = 'main.login'
     login_manager.init_app(app)
-
-    # TODO: UNCOMMENT FOR DB USE
-    # @login_manager.user_loader
-    # def load_user(user_id):
-    #     return User.query.get(int(user_id))
-
+    
     @login_manager.user_loader
-    def load_user(user_id):
-        from .routes import USERS
-        if user_id in USERS:
-            return User(user_id)
-        return None
-
-    from src.routes import main
+    def load_user(user_id: int | str):
+        return User.query.get(int(user_id))
+    
     app.register_blueprint(main)
-
+    
+    with app.app_context():
+        # use Flask-Migrate for prod
+        db.create_all()
+    
     return app
-

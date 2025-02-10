@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Update Profile - NATCord</title>
+    <link rel="icon" type="image/x-icon" href="../static/favicon.png">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/profile.css') }}">
+    <script type="module" src="{{ url_for('static', filename='js/profile.js') }}"></script>
+</head>
+
+<body>
+    <!-- Include the navbar at the top -->
+    {% include 'navbar.html' %}
+
+    <div class="profile-container">
+        <h1>Update Profile</h1>
+        <form id="profileForm" method="post" enctype="multipart/form-data">
+            <label for="username">Username</label>
+            <input type="text" id="username" name="username" value="{{ user.username }}" required>
+
+            <label for="old_password">Old Password (required if changing password)</label>
+            <input type="password" id="old_password" name="old_password">
+
+            <label for="new_password">New Password</label>
+            <input type="password" id="new_password" name="new_password">
+
+            <label for="chat_color">Chat Color</label>
+            <input type="color" id="chat_color" name="chat_color" value="{{ user.color_hex }}">
+
+            <label for="icon">Profile Icon</label>
+            <input type="file" id="icon" name="icon" accept="image/*">
+            <!-- Hidden field to store the Base64 version -->
+            <input type="hidden" id="icon_b64" name="icon_b64" value="{{ user.icon_b64 }}">
+
+            <button type="submit">Update Profile</button>
+        </form>
+    </div>
+</body>
+
+</html>
