@@ -13,6 +13,9 @@ COPY . .
 # Expose the port (Gunicorn listens on 8000 inside the container)
 EXPOSE 8000
 
+# Initialize the database
+RUN python -m src.db.deploy
+
 # Use the wsgi.py entry point
 CMD ["gunicorn", "-w", "4", "wsgi:app", "-b", "0.0.0.0:8000"]
 
