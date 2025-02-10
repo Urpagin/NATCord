@@ -76,11 +76,12 @@ body {
 .message-container {
     flex: 1;
     padding: 10px;
-    overflow-y: auto;
-    min-height: 0;
-    /* Crucial for flex items */
+    overflow-y: auto;  /* Active le défilement si nécessaire */
+    min-height: 0;  /* Empêche la zone de forcer un agrandissement */
+    max-height: calc(100vh - 120px); /* Ajuste la hauteur max (120px laisse de la place pour la barre d'input) */
+    display: flex;
+    flex-direction: column;
 }
-
 /* Message styling with wrapping */
 .message {
     margin-bottom: 10px;
