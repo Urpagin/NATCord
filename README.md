@@ -2,6 +2,8 @@
 
 A simple instant messenger with a UI similar to Discord.
 
+Public instance at [https://natcord.urpagin.net](https://natcord.urpagin.net).
+
 # Hosting
 
 ## Quick Setup (Linux)
