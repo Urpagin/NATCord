@@ -243,6 +243,31 @@ window.addEventListener('DOMContentLoaded', () => {
 
     const sendButton = document.getElementById('sendButton');
     sendButton.addEventListener('click', sendMessage);
+
+document.addEventListener('keydown', (event) => {
+  const input = document.getElementById('messageInput');
+  
+  // If the input isn't focused, focus it.
+  if (document.activeElement !== input) {
+    input.focus();
+    
+    // Handle printable characters (length of 1).
+    if (event.key.length === 1 && !event.ctrlKey && !event.metaKey && !event.altKey) {
+      input.value += event.key;
+      event.preventDefault();
+    }
+    
+    // Handle Backspace.
+    if (event.key === 'Backspace') {
+      input.value = input.value.slice(0, -1);
+      event.preventDefault();
+    }
+    
+  }
+});
+
+
+    
 });
 
 

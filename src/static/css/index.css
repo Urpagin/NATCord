@@ -1,11 +1,9 @@
-/* Reset default styles */
 * {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
 }
 
-/* Body: Column flex container, full viewport height */
 body {
     display: flex;
     flex-direction: column;
@@ -15,13 +13,11 @@ body {
     font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 
-/* Layout: Row flex container filling the remaining space */
 .layout {
     display: flex;
     flex: 1;
 }
 
-/* Left Sidebar for channels */
 .sidebar {
     width: 200px;
     background-color: #2f3136;
@@ -60,10 +56,8 @@ body {
     flex-direction: column;
     background-color: #36393f;
     overflow: hidden;
-    /* Prevents content from overflowing the container */
 }
 
-/* Chat Header: Fixed height */
 .chat-header {
     padding: 10px;
     background-color: #2f3136;
@@ -72,7 +66,6 @@ body {
     flex-shrink: 0;
 }
 
-/* Message Container: Grows and scrolls */
 .message-container {
     flex: 1;
     padding: 10px;
@@ -82,7 +75,6 @@ body {
     display: flex;
     flex-direction: column;
 }
-/* Message styling with wrapping */
 .message {
     margin-bottom: 10px;
     padding: 8px;
@@ -91,14 +83,10 @@ body {
     display: flex;
     flex-direction: column;
     word-wrap: break-word;
-    /* Legacy */
     overflow-wrap: break-word;
-    /* Modern */
     white-space: pre-wrap;
-    /* Preserve whitespace and wrap */
 }
 
-/* Input Bar: Fixed at the bottom */
 .input-bar {
     padding: 10px;
     background-color: #40444b;
@@ -127,7 +115,6 @@ body {
     color: #fff;
 }
 
-/* Right Sidebar for online users */
 .online-sidebar {
     width: 200px;
     background-color: #2f3136;
@@ -156,7 +143,6 @@ body {
 }
 
 
-/* Optional: Additional styling for message sub-elements */
 .message .username {
     font-weight: bold;
     margin-bottom: 3px;

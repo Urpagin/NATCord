@@ -1,4 +1,3 @@
-/* Navbar styling */
 .navbar {
     position: fixed;
     top: 0;
@@ -11,7 +10,6 @@
     align-items: center;
     justify-content: space-between;
     z-index: 1000;
-    /* Adjust if necessary */
 }
 
 
@@ -29,12 +27,10 @@
     cursor: pointer;
 }
 
-/* Dropdown menu for the hamburger */
 .menu-dropdown {
     display: none;
     position: absolute;
     top: 40px;
-    /* Adjust to appear below the button */
     left: 0;
     background-color: #2f3136;
     border: 1px solid #4f545c;
@@ -72,7 +68,6 @@
     margin: 0;
 }
 
-/* Override the default styling of links inside .navbar-title */
 .navbar-title a {
     color: inherit;
     text-decoration: none;
