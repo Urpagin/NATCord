@@ -66,7 +66,9 @@ def create_database(database_dir: str, database_name: str):
     Creates the database (and its tables) using the Flask application factory.
     """
     # Use environment variable or fallback default for the database URL.
-    database_url = os.getenv("DATABASE_URL", f"sqlite:///{database_dir}/{database_name}.db")
+    database_url = os.getenv(
+        "DATABASE_URL", f"sqlite:///{database_dir}/{database_name}.db"
+    )
 
     # Create the database directory if it doesn't exist.
     if not os.path.exists(database_dir):
@@ -78,22 +80,26 @@ def create_database(database_dir: str, database_name: str):
         app.config["SQLALCHEMY_DATABASE_URI"] = database_url
         with app.app_context():
             db.create_all()
-        logging.debug(f"Database {database_name}.db successfully created in {database_dir}")
+        logging.debug(
+            f"Database {database_name}.db successfully created in {database_dir}"
+        )
     except Exception as e:
         logging.error(f"Failed to create database: {e}")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     # Get the base directory of this deploy script.
     base_dir: str = os.path.abspath(os.path.dirname(__file__))
-    env_file: str = os.path.join('.env')
-    database_dir: str = os.path.join(base_dir, 'instance')
-    database_name: str = 'natcord'
+    env_file: str = os.path.join(".env")
+    database_dir: str = os.path.join(base_dir, "instance")
+    database_name: str = "natcord"
 
-    print(os.path.join(base_dir, database_dir, database_name + '.db'))
-    if os.path.exists(os.path.join(base_dir, database_dir, database_name + '.db')):
-        logging.warning('Database file already exist, not re-creating it.')
-        logging.warning('Deploy script halted, please delete or backup the database file to re-run this script.')
+    print(os.path.join(base_dir, database_dir, database_name + ".db"))
+    if os.path.exists(os.path.join(base_dir, database_dir, database_name + ".db")):
+        logging.warning("Database file already exist, not re-creating it.")
+        logging.warning(
+            "Deploy script halted, please delete or backup the database file to re-run this script."
+        )
         exit(0)
 
     # Define table names.

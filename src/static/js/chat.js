@@ -62,6 +62,7 @@ async function fetchMessages() {
         // Update lastTimestamp to the most recent message received
         if (messages.length > 0) {
             lastTimestamp = Math.floor(Date.now() / 1000); // Initialize with the current time
+            lastTimestamp = messages[messages.length - 1].timestamp;
         }
     } catch (error) {
         console.error("Error fetching messages:", error);
